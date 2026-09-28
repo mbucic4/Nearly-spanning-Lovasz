@@ -1,0 +1,146 @@
+version: v0.4
+project:
+  name: "Near-linear cycles in connected vertex-transitive graphs"
+  description: >-
+    A Lean formalization of the near-linear cycle theorem in
+    "Lovász conjecture holds asymptotically". For every positive ε, sufficiently
+    large connected finite vertex-transitive graphs contain a simple cycle with
+    at least n^(1−ε) edges. The development includes a weaker-constant
+    Bondy–Locke path-to-cycle comparison and the finite approximate-group and
+    expansion arguments used in the path proofs.
+  authors:
+    - "Matija Bucic"
+  responsible_maintainers:
+    - "Matija Bucic"
+  license: Apache-2.0
+classification:
+  arxiv: [math.CO]
+  msc2020: [05C45, 05C38]
+sources:
+  - title: "Lovász conjecture holds asymptotically"
+    type: paper
+    authors:
+      - "Matija Bucić"
+      - "Micha Christoph"
+      - "Alexey Pokrovskiy"
+      - "Raphael Steiner"
+    location: "https://sites.google.com/view/matija-bucic/research"
+    relationship: formalizes
+    note: >-
+      Working draft dated 23 September 2026 (building on arXiv 2606.09742); the compared declarations correspond
+      to Theorems 1.1, 3.17, and A.1.
+  - title: "Relative lengths of paths and cycles in 3-connected graphs"
+    type: paper
+    authors:
+      - "J. A. Bondy"
+      - "S. C. Locke"
+    id: "Discrete Mathematics 33 (1981), 111–122"
+    relationship: background
+    note: >-
+      The Lean development proves a path-to-cycle comparison with coefficient
+      2/7 rather than the paper's 2/5; this suffices for the asymptotic cycle result.
+  - title: "Nearly Hamilton cycles in sublinear expanders, and applications"
+    type: paper
+    authors:
+      - "Shoham Letzter"
+      - "Abhishek Methuku"
+      - "Benny Sudakov"
+    id: "arXiv:2503.07147v2"
+    relationship: background
+    note: "Source for expansion arguments formalized in the proof development."
+  - title: "The structure of approximate groups"
+    type: paper
+    authors:
+      - "Emmanuel Breuillard"
+      - "Ben Green"
+      - "Terence Tao"
+    id: "arXiv:1110.5008v2"
+    relationship: background
+    note: "Background for the finite approximate-group arguments."
+  - title: "Freiman's theorem in an arbitrary nilpotent group"
+    type: paper
+    authors:
+      - "Matthew Tointon"
+    id: "arXiv:1211.3989v3"
+    relationship: background
+  - title: "A finitary structure theorem for vertex-transitive graphs of polynomial growth"
+    type: paper
+    authors:
+      - "Romain Tessera"
+      - "Matthew C. H. Tointon"
+    id: "arXiv:1908.06044v3"
+    relationship: background
+status:
+  scope: >-
+    The compared declarations assert unconditional near-linear cycle bounds for
+    finite connected vertex-transitive and Cayley graphs, as well as the path
+    bounds used to obtain them. Path statements count edges while the cited
+    paper's path formulation counts vertices. The Bondy-Locke comparison uses
+    coefficient 2/7 rather than 2/5. The full general Breuillard-Green-Tao
+    structure theorem is not proved; finiteBGTCore is a reduced finite
+    consequence used for the path results.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: [propext, Classical.choice, Quot.sound]
+automation:
+  methods:
+    - method: agent
+      models: []
+      framework: "Aristotle (Harmonic)"
+      tool_setup: "Substantive Lean proof development;"
+    - method: agent
+      models: ["GPT-6"]
+      framework: "OpenAI Codex"
+      tool_setup: "Statement audit, Challenge/Solution preparation, Lean 4.35 API port, and packaging."
+  notes: >-
+    The supplied source archive identifies Aristotle as an editor of the Lean
+    project. Codex audited the path and cycle declarations, ported the source
+    to Lean 4.35.0-rc3 with the matching Mathlib pin, migrated all 154 project
+    Lean sources to the module system, built the full project, checked the
+    selected theorems' standard-axiom dependencies, and prepared this package.
+    Human mathematical review of the whole formalization is not claimed.
+review:
+  status: agent-reviewed
+  reviewers: ["OpenAI Codex"]
+  notes: >-
+    A full Lean 4.35.0-rc3 build passed for all 152 proof modules on 28
+    September 2026 after all 154 project Lean source files were migrated to
+    module headers. Separate #print axioms checks of four core cycle results
+    and all four Palomar Solution theorems found only propext,
+    Classical.choice, and Quot.sound. Leanchecker replay passed for the
+    Solution and BondyLockeMain modules. Palomar Comparator and NanoDa
+    verification have not run. Prior Lean
+    formalizations have not been assessed; no novelty claim is made.
+fidelity:
+  divergences: >-
+    The path bounds count edges rather than vertices, which is slightly
+    stronger. The Bondy-Locke comparison uses coefficient 2/7 instead of 2/5,
+    which still yields the same near-linear cycle exponent. The Cayley graph
+    construction symmetrizes the generating relation and removes loops. The full
+    BGT theorem is not claimed; only a reduced finite consequence is proved.
+alignment:
+  namespace: PalomarLovasz
+  statements:
+    - source: "Theorem 1.1 of Lovász conjecture holds asymptotically"
+      lean: PalomarLovasz.vertex_transitive_long_cycle
+      module: Solution
+      status: proved
+      note: "Finite connected vertex-transitive graphs; cycle edge count."
+    - source: "Cayley-graph specialization of Theorem 1.1"
+      lean: PalomarLovasz.cayley_long_cycle
+      module: Solution
+      status: proved
+      note: "Finite connected Cayley graphs; cycle edge count."
+    - source: "Theorem 3.17 of Lovász conjecture holds asymptotically"
+      lean: PalomarLovasz.cayley_long_path
+      module: Solution
+      status: proved
+      note: "Finite connected Cayley graphs; path edge count."
+    - source: "Theorem A.1 of Lovász conjecture holds asymptotically"
+      lean: PalomarLovasz.vertex_transitive_long_path
+      module: Solution
+      status: proved
+      note: "Finite connected vertex-transitive graphs; path edge count."
+acknowledgements: >-
+  Aristotle (Harmonic) generated substantive Lean proofs. The project depends
+  on Lean and Mathlib. The mathematical paper has four authors as listed above.
